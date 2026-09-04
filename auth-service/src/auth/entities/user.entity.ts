@@ -6,6 +6,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export enum UserRole {
+  HOST = 'HOST',
+  GUEST = 'GUEST',
+}
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -16,6 +21,9 @@ export class User {
 
   @Column({ unique: true })
   email!: string;
+
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.GUEST })
+  role!: string;
 
   @Column()
   passwordHash!: string;

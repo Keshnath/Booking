@@ -4,28 +4,33 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  Index,
 } from 'typeorm';
 
-@Entity('property') // Defines the table name in your database
+@Entity('properties') // Recommendation 1: Plural table naming
 export class Property {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ length: 100 })
+  @Index() // Recommendation 2: Index foreign key columns
+  @Column('uuid')
+  userId!: string;
+
+  @Column({ type: 'varchar', length: 100 })
   name!: string;
 
-  @Column()
+  @Column({ type: 'text' }) // Recommendation 3: Explicit text type for long descriptions
   description!: string;
 
-  @Column()
-  price! : number
+  @Column({ type: 'decimal', precision: 12, scale: 2 }) // Recommendation 4: Precision for financial values
+  price!: number;
 
-  @Column()
-  guests! : number
+  @Column({ type: 'int' }) // Recommendation 5: Explicit integer type
+  guests!: number;
 
-  @UpdateDateColumn()
-  updatedAt!: Date;
-
-  @CreateDateColumn()
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: Date;
+
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt!: Date;
 }

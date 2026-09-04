@@ -10,7 +10,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
-import { User } from './entities/user.entity';
+import { User, UserRole } from './entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +25,7 @@ export class AuthService {
     name: string,
     email: string,
     password: string,
+    role : UserRole
   ) {
     const existingUser = await this.userRepository.findOne({
       where: {
@@ -42,6 +43,7 @@ export class AuthService {
       name,
       email,
       passwordHash,
+      role
     });
 
     const savedUser = await this.userRepository.save(user);
@@ -78,11 +80,10 @@ export class AuthService {
 
     const payload = {
       sub: user.id,
-      email: user.email,
     };
 
     const accessToken =
-      await this.jwtService.signAsync(payload);
+      await this.jwtService.signAsync(payload ,{});
 
     return {
       accessToken,
