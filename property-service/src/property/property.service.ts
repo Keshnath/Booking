@@ -12,7 +12,7 @@ export class PropertyService {
   ) {}
 
   async createProperty(dto: CreatePropertyDto): Promise<Property> {
-    const property = this.propertyRepository.create(dto);
+    const property = this.propertyRepository.create({userId:dto.sub , ...dto});
     return await this.propertyRepository.save(property);
   }
 

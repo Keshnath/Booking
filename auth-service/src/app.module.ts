@@ -14,18 +14,15 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.getOrThrow<string>('DB_HOST'),
-        port: configService.getOrThrow<number>('DB_PORT'),
-        username: configService.getOrThrow<string>('DB_USERNAME'),
-        password: configService.getOrThrow<string>('DB_PASSWORD'),
-        database: configService.getOrThrow<string>('DB_DATABASE'),
-
-        autoLoadEntities: true,
-
-        synchronize: true,
+      useFactory: (config: ConfigService) => ({
+        type: 'postgres', // Or 'mysql', 'sqlite'
+        host: config.get<string>('DB_HOST', 'localhost'),
+        port: config.get<number>('DB_PORT', 5432),
+        username: config.get<string>('DB_USERNAME', 'postgres'),
+        password: config.get<string>('DB_PASSWORD', 'password'),
+        database: config.get<string>('DB_NAME', 'auth_service_db'),
+        autoLoadEntities: true, // Automatically loads entities registered in submodules
+        synchronize: true, // Set to false in production!
       }),
     }),
 
