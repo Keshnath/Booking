@@ -7,7 +7,10 @@ import { AuthController } from './auth/auth.controller';
 import { BookingController } from './booking/booking.controller';
 import { PropertyController } from './property/property.controller';
 import { HealthModule } from './health/health.module';
-
+import { InventoriesController } from './inventories/inventories.controller';
+import { PaymentsController } from './payments/payments.controller';
+import { PricingsController } from './pricings/pricings.controller';
+import { SearchsController } from './searchs/searchs.controller';
 
 @Module({
   imports: [
@@ -69,6 +72,19 @@ import { HealthModule } from './health/health.module';
           },
         }),
       },
+
+      {
+        name: 'PRICING_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (config: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: config.get<string>('PRICING_SERVICE_HOST', '127.0.0.1'),
+            port: config.get<number>('PRICING_SERVICE_PORT', 3005),
+          },
+        }),
+      },
       {
         name: 'PROPERTY_SERVICE',
         imports: [ConfigModule],
@@ -77,13 +93,33 @@ import { HealthModule } from './health/health.module';
           transport: Transport.TCP,
           options: {
             host: config.get<string>('PROPERTY_SERVICE_HOST', '127.0.0.1'),
-            port: config.get<number>('PROPERTY_SERVICE_PORT', 3005),
+            port: config.get<number>('PROPERTY_SERVICE_PORT', 3006),
+          },
+        }),
+      },
+      {
+        name: 'SEARCH_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (config: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: config.get<string>('PRICING_SERVICE_HOST', '127.0.0.1'),
+            port: config.get<number>('PRICING_SERVICE_PORT', 3007),
           },
         }),
       },
     ]),
-    HealthModule
+    HealthModule,
   ],
-  controllers: [AuthController, BookingController, PropertyController],
+  controllers: [
+    AuthController,
+    BookingController,
+    PropertyController,
+    InventoriesController,
+    PaymentsController,
+    PricingsController,
+    SearchsController,
+  ],
 })
 export class AppModule {}

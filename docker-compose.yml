@@ -13,7 +13,17 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       # Mount script to create multiple databases on startup
-      - ./init-dbs.sql:/docker-entrypoint-initdb.d/init-dbs.sql
+      - ./init-dbs.sql/init-dbs.sql:/docker-entrypoint-initdb.d/init-dbs.sql
+
+  mongo:
+    image: mongo:7
+    container_name: microservices_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
 
 volumes:
   postgres_data:
+  mongo_data:

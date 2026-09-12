@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Inject,
   Param,
   Post,
@@ -13,12 +14,19 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { JwtGuard } from 'src/auth/jwt-auth.guard';
 
-@Controller('booking')
+
+
+@Controller('bookings')
 @UseGuards(JwtGuard)
 export class BookingController {
   constructor(
     @Inject('BOOKING_SERVICE') private readonly bookingService: ClientProxy,
   ) {}
+
+  @Get('health')
+  healthCheck() {
+    return this.bookingService.send({ cmd: 'health_check' }, {});
+  }
 
   @Post(':id')
   async createBooking(@Req() req, @Param('id') id: string, @Body() data: any) {

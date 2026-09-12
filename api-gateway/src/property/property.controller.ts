@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { JwtGuard } from 'src/auth/jwt-auth.guard';
+import { JwtGuard } from '../auth/jwt-auth.guard';
 
 @Controller('properties')
 @UseGuards(JwtGuard)
@@ -18,6 +18,11 @@ export class PropertyController {
   constructor(
     @Inject('PROPERTY_SERVICE') private readonly propertyClient: ClientProxy,
   ) {}
+
+  @Get('health')
+  healthCheck() {
+    return this.propertyClient.send({ cmd: 'health_check' }, {});
+  }
 
   @Post()
   addProperty(@Req() req, @Body() propertyData: any) {

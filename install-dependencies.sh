@@ -2,9 +2,9 @@
 
 set -e
 
-echo "======================================"
-echo "Installing dependencies for services"
-echo "======================================"
+echo "=================================================="
+echo " Cleaning & Reinstalling Dependencies for Services"
+echo "=================================================="
 
 SERVICES=(
   "api-gateway"
@@ -13,18 +13,24 @@ SERVICES=(
   "inventory-service"
   "payment-service"
   "property-service"
+  "pricing-service"
+  "search-service"
 )
 
 for SERVICE in "${SERVICES[@]}"
 do
   echo ""
-  echo "--------------------------------------"
-  echo "Installing dependencies: $SERVICE"
-  echo "--------------------------------------"
+  echo "--------------------------------------------------"
+  echo " Processing service: $SERVICE"
+  echo "--------------------------------------------------"
 
   if [ -d "$SERVICE" ]; then
     cd "$SERVICE"
 
+    echo "Cleaning node_modules and build artifacts..."
+    rm -rf node_modules dist package-lock.json
+
+    echo "Installing fresh dependencies..."
     npm install
 
     cd ..
@@ -34,6 +40,6 @@ do
 done
 
 echo ""
-echo "======================================"
-echo "All dependencies installed successfully!"
-echo "======================================"
+echo "=================================================="
+echo " Clean reinstall completed successfully!"
+echo "=================================================="

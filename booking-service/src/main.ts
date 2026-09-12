@@ -13,7 +13,7 @@ async function bootstrap() {
   const appContext = await NestFactory.createApplicationContext(AppModule);
   const configService = appContext.get(ConfigService);
 
-  const PORT = configService.get<number>('PORT', 3001);
+  const PORT = configService.get<number>('PORT', 3002);
   const HOST = configService.get<string>('HOST', '127.0.0.1');
 
   // Close context before instantiating microservice
@@ -46,6 +46,7 @@ async function bootstrap() {
       },
     }),
   );
+  app.enableShutdownHooks();
 
   await app.listen();
   console.log(`Booking service is up on TCP ${HOST}:${PORT}`);
