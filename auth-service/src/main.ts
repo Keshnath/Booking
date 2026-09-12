@@ -46,7 +46,7 @@ async function bootstrap() {
       },
     }),
   );
-
+app.enableShutdownHooks();
   await app.listen();
   console.log(`Auth service is up on TCP ${HOST}:${PORT}`);
 }

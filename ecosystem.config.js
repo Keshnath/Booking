@@ -3,61 +3,58 @@ module.exports = {
     {
       name: "api-gateway",
       cwd: "./api-gateway",
-      script: "npm",
-      args: "run start:dev",
-      interpreter: "none",
+      script: "cmd.exe",
+      args: "/c npm run start:dev",
       autorestart: true,
-      watch: false,
+      watch: false
     },
-
     {
       name: "auth-service",
       cwd: "./auth-service",
-      script: "npm",
-      args: "run start:dev",
-      interpreter: "none",
+      script: "cmd.exe",
+      args: "/c npm run start:dev",
       autorestart: true,
-      watch: false,
+      watch: false
     },
-
     {
       name: "booking-service",
       cwd: "./booking-service",
-      script: "npm",
-      args: "run start:dev",
-      interpreter: "none",
+      script: "cmd.exe",
+      args: "/c npm run start:dev",
       autorestart: true,
-      watch: false,
+      watch: false
     },
-
     {
       name: "inventory-service",
       cwd: "./inventory-service",
-      script: "npm",
-      args: "run start:dev",
-      interpreter: "none",
+      script: "cmd.exe",
+      args: "/c npm run start:dev",
       autorestart: true,
-      watch: false,
+      watch: false
     },
-
     {
       name: "payment-service",
       cwd: "./payment-service",
-      script: "npm",
-      args: "run start:dev",
-      interpreter: "none",
+      script: "cmd.exe",
+      args: "/c npm run start:dev",
       autorestart: true,
-      watch: false,
+      watch: false
     },
-
     {
       name: "property-service",
       cwd: "./property-service",
-      script: "npm",
+      script: "cmd.exe",
       args: "run start:dev",
-      interpreter: "none",
       autorestart: true,
-      watch: false,
+      watch: false
+    },
+    {
+      name: "search-service",
+      cwd: "./search-service",
+      script: "cmd.exe",
+      args: "/c npm run start:dev",
+      autorestart: true,
+      watch: false
     },
   ],
 };

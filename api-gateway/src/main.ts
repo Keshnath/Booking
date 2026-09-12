@@ -33,6 +33,7 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new RpcToHttpExceptionFilter());
 
+  app.enableShutdownHooks();
   // 4. Start HTTP Server
   await app.listen(PORT);
   console.log(`API Gateway HTTP Server is running on http://localhost:${PORT}`);
