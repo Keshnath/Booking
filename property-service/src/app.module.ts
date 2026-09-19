@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PropertyModule } from './property/property.module';
-import { HealthService } from './health/health.service';
-import { HealthController } from './health/health.controller';
 import { HealthModule } from './health/health.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DetailsModule } from './details/details.module';
+import { PricingsModule } from './pricings/pricings.module';
+import { ClientsModule } from '@nestjs/microservices/module/clients.module';
+import { Transport } from '@nestjs/microservices/enums/transport.enum';
 
 @Module({
   imports: [
@@ -25,10 +27,40 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         synchronize: true, // Set to false in production!
       }),
     }),
+
+    ClientsModule.registerAsync([
+      {
+        name: 'RMQ_SEARCH_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [
+              configService.get<string>(
+                'RABBITMQ_URL',
+                'amqp://localhost:5672',
+              ),
+            ],
+            exchange: 'property.events', // Topic exchange owned by Property Service
+            exchangeType: 'topic', // Explicitly set topic exchange type
+            // Omit `queue` here so Property Service acts purely as a producer emitting events.
+            // Downstream consumers (like Search Service) define and bind their own queues.
+            noAssert: false, // Ensures exchange is declared if it doesn't exist
+            socketOptions: {
+              heartbeatIntervalInSeconds: 60,
+              reconnectTimeInSeconds: 5,
+            },
+          },
+        }),
+      },
+    ]),
     PropertyModule,
     HealthModule,
+    DetailsModule,
+    PricingsModule,
   ],
-  controllers: [HealthController],
-  providers: [HealthService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

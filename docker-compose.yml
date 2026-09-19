@@ -13,7 +13,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       # Mount script to create multiple databases on startup
-      - ./init-dbs.sql/init-dbs.sql:/docker-entrypoint-initdb.d/init-dbs.sql
+      - ./init-dbs.sql/init-dbs.sql:/docker-entrypoint-initdb.d/init-dbs.sqls
 
   mongo:
     image: mongo:7
@@ -24,6 +24,20 @@ services:
     volumes:
       - mongo_data:/data/db
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: microservices_rabbitmq
+    restart: always
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"   # AMQP protocol port (used by NestJS ClientProxy)
+      - "15672:15672" # RabbitMQ Web Management Dashboard
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
 volumes:
   postgres_data:
   mongo_data:
+  rabbitmq_data:

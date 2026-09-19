@@ -9,7 +9,6 @@ import { PropertyController } from './property/property.controller';
 import { HealthModule } from './health/health.module';
 import { InventoriesController } from './inventories/inventories.controller';
 import { PaymentsController } from './payments/payments.controller';
-import { PricingsController } from './pricings/pricings.controller';
 import { SearchsController } from './searchs/searchs.controller';
 
 @Module({
@@ -72,19 +71,6 @@ import { SearchsController } from './searchs/searchs.controller';
           },
         }),
       },
-
-      {
-        name: 'PRICING_SERVICE',
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: (config: ConfigService) => ({
-          transport: Transport.TCP,
-          options: {
-            host: config.get<string>('PRICING_SERVICE_HOST', '127.0.0.1'),
-            port: config.get<number>('PRICING_SERVICE_PORT', 3005),
-          },
-        }),
-      },
       {
         name: 'PROPERTY_SERVICE',
         imports: [ConfigModule],
@@ -93,7 +79,7 @@ import { SearchsController } from './searchs/searchs.controller';
           transport: Transport.TCP,
           options: {
             host: config.get<string>('PROPERTY_SERVICE_HOST', '127.0.0.1'),
-            port: config.get<number>('PROPERTY_SERVICE_PORT', 3006),
+            port: config.get<number>('PROPERTY_SERVICE_PORT', 3005),
           },
         }),
       },
@@ -105,7 +91,7 @@ import { SearchsController } from './searchs/searchs.controller';
           transport: Transport.TCP,
           options: {
             host: config.get<string>('PRICING_SERVICE_HOST', '127.0.0.1'),
-            port: config.get<number>('PRICING_SERVICE_PORT', 3007),
+            port: config.get<number>('PRICING_SERVICE_PORT', 3006),
           },
         }),
       },
@@ -118,7 +104,6 @@ import { SearchsController } from './searchs/searchs.controller';
     PropertyController,
     InventoriesController,
     PaymentsController,
-    PricingsController,
     SearchsController,
   ],
 })

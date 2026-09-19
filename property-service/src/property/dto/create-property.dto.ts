@@ -1,33 +1,26 @@
 import {
-  IsNotEmpty,
-  IsNumber,
   IsString,
+  IsNotEmpty,
   IsUUID,
+  IsNumber,
+  IsPositive,
   Min,
   MaxLength,
-  IsInt,
-  IsPositive,
 } from 'class-validator';
 
 export class CreatePropertyDto {
-  @IsUUID()
+  @IsUUID('4', { message: 'userId must be a valid UUID v4' })
   @IsNotEmpty()
   sub!: string;
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(100) // Matches entity length constraint
+  @MaxLength(100, { message: 'Property name cannot exceed 100 characters' })
   name!: string;
 
   @IsString()
   @IsNotEmpty()
   description!: string;
 
-  @IsNumber({ maxDecimalPlaces: 2 }) // Ensures maximum 2 decimal places for currency
-  @Min(0)
-  price!: number;
 
-  @IsInt() // Ensures integer values (rejects decimals like 2.5 guests)
-  @IsPositive() // Equivalent to @Min(1)
-  guests!: number;
 }
