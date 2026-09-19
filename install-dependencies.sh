@@ -13,7 +13,6 @@ SERVICES=(
   "inventory-service"
   "payment-service"
   "property-service"
-  "pricing-service"
   "search-service"
 )
 

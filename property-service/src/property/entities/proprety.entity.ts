@@ -1,3 +1,5 @@
+import { Details } from 'src/details/entities/property-detail.entity';
+import { Pricing } from 'src/pricings/entities/pricing.entity';
 import {
   Entity,
   Column,
@@ -5,28 +7,34 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  OneToOne,
+  OneToMany,
 } from 'typeorm';
 
-@Entity('properties') // Recommendation 1: Plural table naming
+
+
+@Entity('properties')
 export class Property {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Index() // Recommendation 2: Index foreign key columns
-  @Column('uuid')
+  @Index()
+  @Column({ type: 'uuid', nullable: false })
   userId!: string;
 
-  @Column({ type: 'varchar', length: 100 })
+  @Column({ type: 'varchar', length: 100, nullable: false })
   name!: string;
 
-  @Column({ type: 'text' }) // Recommendation 3: Explicit text type for long descriptions
+  @Column({ type: 'text', nullable: false })
   description!: string;
 
-  @Column({ type: 'decimal', precision: 12, scale: 2 }) // Recommendation 4: Precision for financial values
-  price!: number;
+  // Inverse 1-to-1 relation with PropertyDetail (No physical column created in DB)
+  @OneToOne(() => Details, (detail) => detail.property)
+  detail!: Details;
 
-  @Column({ type: 'int' }) // Recommendation 5: Explicit integer type
-  guests!: number;
+  // Inverse 1-to-Many relation with Pricing history (No physical column created in DB)
+  @OneToMany(() => Pricing, (pricing) => pricing.property)
+  pricings!: Pricing[];
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: Date;
